@@ -4,7 +4,7 @@ Contributed to the 24th European Control Conference
 
 ## Structure
 
-Inside the IPython notebook `hansen_zuazua.ipynb` you may find the computation of the hyperbolic mimo controller form for the example discussed in the paper
+Inside the IPython notebook `hansen_zuazua.ipynb` you may find the computation of the hyperbolic mimo controller form for the example discussed in the paper.
 
 ## Usage
 
@@ -16,6 +16,10 @@ $ uv run jupyter lab
 ```
 
 to start a jupyter instance which should automatically open a new browser window in which you can then open the notebook.
+
+### Background
+
+This example uses the python toolbox `iace-chimera` which is being developed at the IACE and can be found at https://github.com/umit-iace/tool-pyform.
 
 ## Funding and Copyright
 
