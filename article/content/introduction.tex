@@ -1,0 +1,136 @@
+\section{Introduction}
+Canonical forms serve as a cornerstone for systematic feedback
+design in finite dimensions. Their counterparts for \glspl{dps}
+have been studied since the late 1970s. 
+For linear hyperbolic \glspl{pde}, \cite{Russel1978}
+connected controllability and spectral assignment to
+\glspl{ccf} and neutral delay equations.  
+More recent works linked the aforementioned delay interpretations to flatness
+based parameterisations \cite{FMRR95cdc,FliMou99} -- see also \cite{CookeKrumme1968jmaa} for early ideas in this direction -- and, even more recently, established the connection between such parameterisations and the \gls{ccf} for more general systems.
+In particular, \cite{Woittennek2012-ifacwc} introduced a 
+\gls{hccf} for linear hyperbolic SISO systems comprising general interconnections of hyperbolic \gls{pde} and \gls{ode} (see also \cite{Woittennek2011ifac}). This \gls{hccf}
+generalises the familiar chain-of-integrators
+structure by prepending a transport equation to represent the delays
+of the system imposed by the hyperbolic \glspl{pde}.
+Therein, the canonical coordinates are introduced on the basis of a \gls{fde} 
+arising from a flatness-based parametrisation of the system's input while the required state transforms are computed using the flatness-based parametrisation of the system's original state variables.
+Aside from the above-mentioned state-space approaches, in  \cite{Woittennek2010-siam,Gehring2013}  flatness-based parametrisations also served as means for purely algebraic analysis and control design. These methods employ and partially generalise results from
+\cite{Brethe1996} and \cite{GluesingLuerssen1997}.
+
+As many relevant technological applications posses multiple in- and outputs,
+several control approaches are available, e.g.~ \cite{Knueppel2014} using
+flatness-based methods or \cite{Gabriel2024} employing backstepping designs.
+However, regarding controller forms a direct extension of the existing work to
+the \acs{mimo} case is difficult, as such systems can exihibit
+different delays depending on the considered input which together with the
+bidirectionally coupled ODE result an ill-posed \gls{fde} system,
+thus negating the approach from the \acs{siso} case.
+
+Therefore, the goal of this contribution is to introduce a \gls{hcf} for a class
+of linear hyperbolic \acs{mimo} systems with dynamic boundary conditions and to
+develop a delay reduction algorithm such that the \gls{fde} system is well
+posed and the controller form can be computed.
+To do so, we denote the input-output relation using quasipolynomials whose use
+in the control of hyperbolic systems was already reviewed in \cite{Loiseau1998}
+as well as \cite{Benarab2022} and restate the requirements to introduce a \gls{hcf}
+as column-reduced properties on the resulting quasipolynomial matrices.
+Next, in contrast to the established methods and due to the incommensurate
+delays in the considered systems as well as the interplay with the boundary
+system, we propose a modified quasipolynomial division algorithm to compute
+the required transformation to establish said properties. 
+% hyperbolic systems with boundaries governed by \acsp{ode} for the \acs{siso}
+% case which this contribution extends to the \acs{mimo} case.
+
+
+% Backstepping provides an alternative, transformation-based route that leverages
+% strict-feedback structure and recursive stabilization. Importantly for the
+% present MIMO focus, such designs are not limited to scalar inputs: extensions
+% cover multi-input–multi-output ODE–PDE–ODE systems with general
+% heterodirectional hyperbolic subsystems and additional boundary ODEs, as well
+% as underactuated interconnections and parabolic variants. However, while
+% state-feedback stabilization is systematic, observer and output-feedback
+% designs often hinge on approach-specific structures and measurement placements
+% rather than intrinsic normal forms, with some cases being dual to state
+% feedback and others substantially more involved.
+
+
+% From the onset of state space based approaches, 
+% controller (canonical) forms have been a vital asset
+% for systematic controller designs.
+% As the controller forms for linear \acs{siso} and \acs{mimo} \acs{ode} systems,
+% cf.~\cite{Kalman1963,Luenberger1967} as well for \acs{siso} hyperbolic
+% \acs{pde} systems \cite{Russel1978} are long established and understood,
+% only comparatively recent works 
+% \cite{Woittennek2012-ifacwc,Woittennek2013-cpde,Gehring2023} 
+% discuss
+% hyperbolic systems with boundaries governed by \acsp{ode} for the \acs{siso}
+% case which this contribution extends to the \acs{mimo} case.
+
+Following some preliminaries, where we briefly restate established controller 
+forms and demonstrate the problems that arise if a hyperbolic controller form
+is to be introduced even for the most simple \acs{mimo} system,
+a general \acs{mimo} \gls{hcf} and several subforms are given in \Cref{sec:mimo_hcf}.
+The main part of the contribution in \Cref{sec:computation} then discusses
+how a \gls{hcf} can be obtained for a specific class of systems 
+Finally, \Cref{sec:example} tracks the procedure for an example system.
+
+
+\section{Preliminaries}
+
+% \subsubsection*{Notation}
+\subsection{Notation}
+
+The variables $z$ and $t$ denote space and time.
+The first and second derivative of $x(t)$ is denoted
+by $\dot x(t)$ and $\ddot x(t)$, while the $n$-th 
+derivative is given by $x^{(n)}(t)$
+% Regarding vectors, the operation
+% $\bm x^{[\kron]}(t)$ is used  to substitute each 
+% $x_i(t)$ in $\bm x(t)$ by $x_i^{(\kron_i)}(t)$.
+% For unknowns in several variables 
+% Furthermore, we write e.g.~for 
+and the partial derivative of $x(z,t)$ w.r.t.~$z$.
+by $\partial_z x(z,t)$.
+
+
+To treat \glspl{fde} in an algebraic setting, we identify the
+operators therein with their Fourier-Laplace transforms 
+and treat the application of the transformed operators
+as convolutions.
+Thus, we write $\mathcal{L}\{\diffsym\} = \lapsym$ for
+differentials, while  
+the shifts
+$(\shiftsym^\tau x)(t) = x(t+\tau)$ 
+with $\tau \in \reals$
+are denoted as
+$\mathcal{L}\{\shiftsym^\tau\}(\lapsym) = \exp(\lapsym\tau)$.
+% In that context,
+% $\mathcal{L}\{\flatsym(t)\} = \lapflatsym(s)$.
+% the Laplace transform of e.g.~$\flatsym(t)$ is denoted by $\lapflatsym(s)$.
+
+The shorthand $\leb([a,b])$ is used for the space of square integrable
+functions on $[a,b]$, while $\sob[n]([a,b])$ stands for the space of functions whose $n$-th
+derivative belongs to $\leb([a,b])$
+and $\entirefuncs$
+% as well as $\lapentirefuncs$ 
+for Schwartz-Distributions with compact support.
+% and their Laplace transforms, respectively
+% occurring as the Laplace transformations of shift operators. 
+With $\tvar_f([a,b])$ denoting the total variation of a function $f$ on the
+interval $[a,b]$, $\boundvar([a,b])$ contains functions of bounded
+variation while members of its subset $\boundvarleft([a,b])$ 
+satisfy
+$\lim_{\epsilon \to 0} \tvar_f([b,b+\epsilon)) = 0$.
+% $\boundvarleft([a,b]) = \{
+% 	f \in \boundvar([a,b]) 
+% 	\vert 
+% 	\lim_{\epsilon \to 0} \tvar_f([a,a+\epsilon)) = 0
+% \}$
+
+Furthermore, $\realpolys$ is the space of polynomials in $\diffsym$ with coefficients in $\reals$
+% , $\realgpolys = \mathbb{R}\left[\ggen\right]$ contains generalised polynomials with real-valued exponents 
+and $\realrationals$ consists of rational expressions in $\diffsym$. 
+Regarding a polynomial matrix $X(\diffsym) \in \reals^{n\times n}[\diffsym]$, we denote the \gls{lccm} w.r.t.~$\diffsym$ by $\lccm_{\diffsym}{\mat X(\diffsym)}$ and say that $\mat X(\diffsym)$ is column reduced w.r.t.~$\diffsym$ if $\lccm_{\diffsym}{\mat X(\diffsym)}$ has full generic rank.
+Finally, we call $\mat X(\diffsym)$ unimodular if its determinant is a nonzero constant (and therefore independent of $\diffsym$).
+
+
