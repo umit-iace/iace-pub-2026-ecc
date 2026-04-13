@@ -8,7 +8,8 @@ dependencies = [
 	"arxiv-latex-cleaner",
 	"jupyter==1.1.1",
 	"iace-chimera==0.1.0",
+	"ipykernel>=7.1.0",
 ]
 
 [tool.uv.sources]
-iace-chimera = { path = "tool-chimera", editable = true }
+iace-chimera = { path = "../tool-pyform", editable = true }
