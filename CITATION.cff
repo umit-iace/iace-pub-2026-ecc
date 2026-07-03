@@ -1,0 +1,26 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: >-
+  Supplementary code for the contribution "On the controller
+  form for linear hyperbolic MIMO systems with dynamic
+  boundary conditions"
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Stefan
+    family-names: Ecklebe
+    email: stefan.ecklebe@umit-tirol.at
+    affiliation: UMIT TIROL
+    orcid: 'https://orcid.org/0000-0002-4911-1233'
+repository-code: 'https://github.com/umit-iace/iace-pub-2026-ecc'
+abstract: >-
+  Extended computations for the benchmark system of the ECC
+  paper.
+license: CC-BY-3.0
+commit: f26a03b978bdb9a4affe7a44731628bed1bf74f4
+version: 0.1.0
+date-released: '2026-07-03'
